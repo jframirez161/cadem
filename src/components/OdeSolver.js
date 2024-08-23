@@ -82,7 +82,7 @@ function OdeSolver() {
 const variableDescriptions = {
     
     // Fluids and Solutes
-    intake: 'intake (grams)',
+    intake: 'cumulated intake (grams)',
     H2O: 'H2O/water with dissolved solutes (L)',
     
     // Feed Components
@@ -282,7 +282,7 @@ const variableDescriptions = {
             stateVariableNames.indexOf(plot9Variables[0])  // Default for second row Plot 3
         ]);
 
-        console.log(times); 
+        //console.log(times); 
     };
 
     // Handler to update selected state variable for each dropdown (first row of plots)
@@ -305,6 +305,21 @@ const variableDescriptions = {
         newSelectedVars3[index] = event.target.value;
         setSelectedVars3(newSelectedVars3);
     };
+    
+    const interpolateColor = (color1, color2, factor) => {
+        if (factor < 0) factor = 0;
+        if (factor > 1) factor = 1;
+
+        let result = color1.slice();
+        for (let i = 0; i < 3; i++) {
+            result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        }
+        return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+    };
+
+    // Colors as arrays
+    const vibrantBlue = [30, 144, 255]; // Start color
+    const darkBlue = [25, 50, 100]; // End color
 
     // Prepare data for each plot based on the selected variable
     const getPlotData = (varIndex) => ({
@@ -313,7 +328,7 @@ const variableDescriptions = {
             label: stateVariableNames[varIndex], // Use state variable names here
             data: solution.map(sol => sol[varIndex]),  // Extract the selected state variable over time
             fill: false,
-            borderColor: 'rgb(0, 0, 0)', //`rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`,
+            borderColor: interpolateColor(vibrantBlue, darkBlue, 0.5),
             borderWidth: 1, 
             tension: 0.1
         }]

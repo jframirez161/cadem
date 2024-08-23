@@ -1,5 +1,4 @@
 // odeFunctions.js
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Sigmoidal reduction parameters
 let L = 2800;
@@ -66,6 +65,97 @@ console.log(_intake(14)); // Should give the interpolated intake value at time 2
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+const feed_pulse_3NOP_7_29_24_prelim = [
+    { "var": "intake", "time": 0.0, "value": 472.249255, "method": "replace" },
+    { "var": "intake", "time": 2.0, "value": 540.235932, "method": "replace" },
+    { "var": "intake", "time": 4.0, "value": 358.164118, "method": "replace" },
+    { "var": "intake", "time": 6.0, "value": 1.814358, "method": "replace" },
+    { "var": "intake", "time": 8.0, "value": 2324.307071, "method": "replace" },
+    { "var": "intake", "time": 10.0, "value": 212.345673, "method": "replace" },
+    { "var": "intake", "time": 12.0, "value": 678.123456, "method": "replace" },
+    { "var": "intake", "time": 14.0, "value": 987.654321, "method": "replace" },
+    { "var": "intake", "time": 16.0, "value": 1234.56789, "method": "replace" },
+    { "var": "intake", "time": 18.0, "value": 432.987654, "method": "replace" },
+    { "var": "intake", "time": 20.0, "value": 567.890123, "method": "replace" },
+    { "var": "intake", "time": 22.0, "value": 345.678912, "method": "replace" },
+    { "var": "intake", "time": 24.0, "value": 987.123456, "method": "replace" }
+];
+
+function _sigmoid(x) {
+    return 1 / (1 + Math.exp(-x));
+}
+
+const seq2_0_002 = Array.from({length: Math.floor((9.98 - (-10)) / 0.02) + 1}, (_, i) => -10 + (i * 0.02));
+const smooth_up2_0_002 = seq2_0_002.map(_sigmoid);
+const smooth_down2_0_002 = smooth_up2_0_002.map(x => -x + 1);
+
+function getPattern(smoothArray, val1, val2) {
+    return smoothArray.map(x => x * (val1 - val2) + val2);
+}
+
+const intake_pattern1_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[0].value, feed_pulse_3NOP_7_29_24_prelim[11].value);
+const intake_pattern2_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[1].value, feed_pulse_3NOP_7_29_24_prelim[0].value);
+const intake_pattern3_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[1].value, feed_pulse_3NOP_7_29_24_prelim[2].value);
+const intake_pattern4_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[2].value, feed_pulse_3NOP_7_29_24_prelim[3].value);
+const intake_pattern5_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[4].value, feed_pulse_3NOP_7_29_24_prelim[3].value);
+const intake_pattern6_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[4].value, feed_pulse_3NOP_7_29_24_prelim[5].value);
+const intake_pattern7_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[6].value, feed_pulse_3NOP_7_29_24_prelim[5].value);
+const intake_pattern8_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[7].value, feed_pulse_3NOP_7_29_24_prelim[6].value);
+const intake_pattern9_0_002 = getPattern(smooth_up2_0_002, feed_pulse_3NOP_7_29_24_prelim[8].value, feed_pulse_3NOP_7_29_24_prelim[7].value);
+const intake_pattern10_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[8].value, feed_pulse_3NOP_7_29_24_prelim[9].value);
+const intake_pattern11_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[9].value, feed_pulse_3NOP_7_29_24_prelim[10].value);
+const intake_pattern12_0_002 = getPattern(smooth_down2_0_002, feed_pulse_3NOP_7_29_24_prelim[10].value, feed_pulse_3NOP_7_29_24_prelim[11].value);
+
+const intake_pattern_compiled_3NOP_0_002 = [
+    ...intake_pattern5_0_002, ...intake_pattern6_0_002, ...intake_pattern7_0_002,
+    ...intake_pattern8_0_002, ...intake_pattern9_0_002, ...intake_pattern10_0_002,
+    ...intake_pattern11_0_002, ...intake_pattern12_0_002, ...intake_pattern1_0_002,
+    ...intake_pattern2_0_002, ...intake_pattern3_0_002, ...intake_pattern4_0_002
+];
+
+// Duplicate and extend to cover full 24.0 time range
+const feed_pulse_3NOP_7_29_24_0_002_48HR_RUN = [
+    ...intake_pattern_compiled_3NOP_0_002.map((value, i) => ({
+        "var": "intake",
+        "time": i * 0.001,
+        "value": value,
+        "method": "replace"
+    })),
+    ...intake_pattern_compiled_3NOP_0_002.map((value, i) => ({
+        "var": "intake",
+        "time": 12.0 + i * 0.001,
+        "value": value,
+        "method": "replace"
+    }))
+];
+
+
+function processTime(t, feed_pulse_3NOP_7_29_24_0_002_48HR_RUN) {
+    // Step 1: Round t to 3 decimal places
+    t = Math.round(t * 1000) / 1000;
+    
+    // Step 2: Multiply t by 1000
+    t = Math.round(t * 1000);
+
+    // Step 3: Cap t at 23975 if it exceeds that value
+    if (t > 23975) {
+        t = 23975;
+    }
+
+    // Step 4: Access the intake value at index t
+    const intake = feed_pulse_3NOP_7_29_24_0_002_48HR_RUN[t].value;
+
+    return intake;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 let J_NAD_AcPr = 1.0;
 let JAmNgBa = 0.00861;
 let JAmUrAm = 0.00621;
@@ -1093,7 +1183,8 @@ YPrSfPsBfAcPr = 5.869327452256714e-06;
     
   
 
-let intake = _intake(t);
+//let intake = _intake(t);
+let intake = processTime(t, feed_pulse_3NOP_7_29_24_0_002_48HR_RUN);
 
         
 let dintakedt = intake;  
