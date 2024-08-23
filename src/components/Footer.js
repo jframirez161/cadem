@@ -14,7 +14,7 @@ const Footer = () => (
         {'© 2024 The University of California, Davis. All rights reserved.'}
       </Typography>
       <Typography variant="body2" color="textSecondary" align="center" sx={{ marginTop: '4px' }}>
-        {'Created by John F. Ramirez and Ermias Kebreab'}
+        {'Created by John-Fredy Ramirez-Agudelo, Eleanor May Pressman, and Ermias Kebreab'}
       </Typography>
     </Container>
   </Box>
