@@ -67,13 +67,14 @@ const RK4 = (t0, t1, initialConditions, odeSystem, dt, params) => {
 
 
 const saveResultsToIndexedDB = (results) => {
-    const request = indexedDB.open('OdeResultsDB', 1);
+    const request = indexedDB.open('OdeResultsDB', 1); // Ensure version is correct
 
     request.onupgradeneeded = function(event) {
         const db = event.target.result;
-        // Create the object store if it doesn't exist
+        console.log("onupgradeneeded: Creating object store if not exists");
         if (!db.objectStoreNames.contains('results')) {
             db.createObjectStore('results', { keyPath: 'id' });
+            console.log("Object store 'results' created.");
         }
     };
 
@@ -83,6 +84,14 @@ const saveResultsToIndexedDB = (results) => {
 
     request.onsuccess = function(event) {
         const db = event.target.result;
+        console.log("onsuccess: Database opened successfully");
+
+        // Verify the object store exists before attempting transaction
+        if (!db.objectStoreNames.contains('results')) {
+            console.error("Object store 'results' does not exist.");
+            return;
+        }
+
         const transaction = db.transaction(['results'], 'readwrite');
         const store = transaction.objectStore('results');
 
@@ -106,6 +115,7 @@ const saveResultsToIndexedDB = (results) => {
         };
     };
 };
+
 
 
 
