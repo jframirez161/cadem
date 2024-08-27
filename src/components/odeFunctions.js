@@ -773,7 +773,6 @@ let P_H2OFWIH2O = 2.300151549479167;
 let KHindEx = 0.10827403074441103;
 let QInsolFSG0 = 1.5197945035520457;
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1206,7 +1205,9 @@ FrBr = parseFloat(Fr_data['FrBr']);
 FrNOP = parseFloat(Fr_data['FrNOP']);
 FrBicarb = parseFloat(Fr_data['FrBicarb']);
 FrP = parseFloat(Fr_data['FrP']); 
-    
+
+QInsolFSG0 = FrNDF * FSG_NDF * kNDFProcess  + FrPi * FSG_CP * kPiProcess
+        
     
     
 let dintakedt = intake;  
@@ -2797,7 +2798,7 @@ let pH2 = QH2 < 0
   
 let pHcell = 6.43 + 3.62 * 1e-8 *Math.exp(2.4 * pH);
 //let F_T_Fd = 1 - (((rFr*pH2**2)/(9*(10**(-1*pHcell))**3)))**(1/2) *Math.exp( (deltaG0*1e3)/(chi*R*Temp) );
-let F_T_Fd = 1 //- (Math.pow((rFr * Math.pow(pH2, 2)) / (9 * Math.pow(10, -1 * pHcell) ** 3), 0.5 ) * Math.exp((deltaG0 * 1e3) / (chi * R * Temp)));
+let F_T_Fd = 1 - (Math.pow((rFr * Math.pow(pH2, 2)) / (9 * Math.pow(10, -1 * pHcell) ** 3), 0.5 ) * Math.exp((deltaG0 * 1e3) / (chi * R * Temp)));
     
 //let U_NADH_FrredFrox = 0 if Math.isnan(F_T_Fd) or F_T_Fd <= 0 else K_NADH_FrredFrox * QNADH * F_T_Fd;
 let U_NADH_FrredFrox = Number.isNaN(F_T_Fd) || F_T_Fd <= 0
@@ -2973,7 +2974,7 @@ let P_FaSPoDe = YFaSPoDe * U_PoPoDe;
 let dQFaSdt = P_FaSInFaS + P_FaSTgBa + P_FaSTgBf + P_FaSFaUFaSBa + P_FaSFaUFaSBf + P_FaSFaUFaSFn + P_FaSPoDe + P_FaSWsBaAc + P_FaSWsBaBu + P_FaSWsBaAcPr + P_FaSWsBaLa + P_FaSSaBaAc + P_FaSSaBaBu + P_FaSSaBaAcPr + P_FaSSaBaLa + P_FaSLaBaAcPr + P_FaSLaBaAcBu + P_FaSWsBfAc + P_FaSWsBfBu + P_FaSWsBfAcPr + P_FaSSfBfAc + P_FaSSfBfBu + P_FaSSfBfAcPr + P_FaSWsFnAc + P_FaSWsFnBu + P_FaSWsFnLa + P_FaSSfnFnAc + P_FaSSfnFnBu + P_FaSSfnFnLa + P_FaSLaFnAcBu + P_FaSWsPoAc + P_FaSWsPoBu + P_FaSWsPoLa + P_FaSFdPoAc + P_FaSFdPoBu + P_FaSFdPoLa + P_FaSSiPoAc + P_FaSSiPoBu + P_FaSSiPoLa + P_FaSSpPoAc + P_FaSSpPoBu + P_FaSSpPoLa + P_FaSLaPoAcBu - U_FaSFaSEx - U_FaSPsBaWsAc - U_FaSPsBaWsBu - U_FaSPsBaWsAcPr - U_FaSPsBaWsLa - U_FaSPsBaSaAc - U_FaSPsBaSaBu - U_FaSPsBaSaAcPr - U_FaSPsBaSaLa - U_FaSPsBaLaAcPr - U_FaSPsBaLaAcBu - U_FaSAmBaWsAc - U_FaSAmBaWsBu - U_FaSAmBaWsAcPr - U_FaSAmBaWsLa - U_FaSAmBaSaAc - U_FaSAmBaSaBu - U_FaSAmBaSaAcPr - U_FaSAmBaSaLa - U_FaSAmBaLaAcPr - U_FaSAmBaLaAcBu - U_FaSPsBfWsAc - U_FaSPsBfWsBu - U_FaSPsBfWsAcPr - U_FaSPsBfSfAc - U_FaSPsBfSfBu - U_FaSPsBfSfAcPr - U_FaSAmBfWsAc - U_FaSAmBfWsBu - U_FaSAmBfWsAcPr - U_FaSAmBfSfAc - U_FaSAmBfSfBu - U_FaSAmBfSfAcPr - U_FaSPsFnWsAc - U_FaSPsFnWsBu - U_FaSPsFnWsLa - U_FaSPsFnSfnAc - U_FaSPsFnSfnBu - U_FaSPsFnSfnLa - U_FaSPsFnLaAcBu - U_FaSAmFnWsAc - U_FaSAmFnWsBu - U_FaSAmFnWsLa - U_FaSAmFnSfnAc - U_FaSAmFnSfnBu - U_FaSAmFnSfnLa - U_FaSAmFnLaAcBu - U_FaSPiPoWsAc - U_FaSPiPoWsBu - U_FaSPiPoWsLa - U_FaSPiPoFdAc - U_FaSPiPoFdBu - U_FaSPiPoFdLa - U_FaSPiPoSiAc - U_FaSPiPoSiBu - U_FaSPiPoSiLa - U_FaSPiPoSpAc - U_FaSPiPoSpBu - U_FaSPiPoSpLa - U_FaSPiPoLaAcBu - U_FaSPsPoWsAc - U_FaSPsPoWsBu - U_FaSPsPoWsLa - U_FaSPsPoFdAc - U_FaSPsPoFdBu - U_FaSPsPoFdLa - U_FaSPsPoSiAc - U_FaSPsPoSiBu - U_FaSPsPoSiLa - U_FaSPsPoSpAc - U_FaSPsPoSpBu - U_FaSPsPoSpLa - U_FaSPsPoLaAcBu - U_FaSBaPoWsAc - U_FaSBaPoWsBu - U_FaSBaPoWsLa - U_FaSBaPoFdAc - U_FaSBaPoFdBu - U_FaSBaPoFdLa - U_FaSBaPoSiAc - U_FaSBaPoSiBu - U_FaSBaPoSiLa - U_FaSBaPoSpAc - U_FaSBaPoSpBu - U_FaSBaPoSpLa - U_FaSBaPoLaAcBu - U_FaSBfPoWsAc - U_FaSBfPoWsBu - U_FaSBfPoWsLa - U_FaSBfPoFdAc - U_FaSBfPoFdBu - U_FaSBfPoFdLa - U_FaSBfPoSiAc - U_FaSBfPoSiBu - U_FaSBfPoSiLa - U_FaSBfPoSpAc - U_FaSBfPoSpBu - U_FaSBfPoSpLa - U_FaSBfPoLaAcBu - U_FaSFnPoWsAc - U_FaSFnPoWsBu - U_FaSFnPoWsLa - U_FaSFnPoFdAc - U_FaSFnPoFdBu - U_FaSFnPoFdLa - U_FaSFnPoSiAc - U_FaSFnPoSiBu - U_FaSFnPoSiLa - U_FaSFnPoSpAc - U_FaSFnPoSpBu - U_FaSFnPoSpLa - U_FaSFnPoLaAcBu - U_FaSPoPoWsAc - U_FaSPoPoWsBu - U_FaSPoPoWsLa - U_FaSPoPoFdAc - U_FaSPoPoFdBu - U_FaSPoPoFdLa - U_FaSPoPoSiAc - U_FaSPoPoSiBu - U_FaSPoPoSiLa - U_FaSPoPoSpAc - U_FaSPoPoSpBu - U_FaSPoPoSpLa - U_FaSPoPoLaAcBu;
 
     
-let zeroValues = new Array(50).fill(0);
+//let zeroValues = new Array(50).fill(0);
 
 
 return [
