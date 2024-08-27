@@ -67,11 +67,12 @@ const RK4 = (t0, t1, initialConditions, odeSystem, dt, params) => {
 
 
 const saveResultsToIndexedDB = (results) => {
-    const request = indexedDB.open('OdeResultsDB', 1); // Ensure version is correct
+    const request = indexedDB.open('OdeResultsDB', 2); // Increment version to 2 to force upgrade
 
     request.onupgradeneeded = function(event) {
         const db = event.target.result;
         console.log("onupgradeneeded: Creating object store if not exists");
+
         if (!db.objectStoreNames.contains('results')) {
             db.createObjectStore('results', { keyPath: 'id' });
             console.log("Object store 'results' created.");
@@ -86,7 +87,6 @@ const saveResultsToIndexedDB = (results) => {
         const db = event.target.result;
         console.log("onsuccess: Database opened successfully");
 
-        // Verify the object store exists before attempting transaction
         if (!db.objectStoreNames.contains('results')) {
             console.error("Object store 'results' does not exist.");
             return;
@@ -95,15 +95,14 @@ const saveResultsToIndexedDB = (results) => {
         const transaction = db.transaction(['results'], 'readwrite');
         const store = transaction.objectStore('results');
 
-        // Clear the store before saving new results
         store.clear().onsuccess = function() {
             results.forEach((result, index) => {
                 const lastSolution = result.result.solutions[result.result.solutions.length - 1];
                 const savedData = {
                     dietName: result.dietName,
                     lastIntake: lastSolution[0],
-                    lastCH4: lastSolution[1],
-                    lastCO2: lastSolution[2]
+                    lastCH4: lastSolution[2],
+                    lastCO2: lastSolution[3]
                 };
 
                 store.add({ id: `dietResult_${index}`, data: savedData });
@@ -115,6 +114,7 @@ const saveResultsToIndexedDB = (results) => {
         };
     };
 };
+
 
 
 

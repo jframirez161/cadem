@@ -6,7 +6,7 @@ import Plot from 'react-plotly.js';
 
 const getResultsFromIndexedDB = () => {
     return new Promise((resolve, reject) => {
-        const request = indexedDB.open('OdeResultsDB', 1);
+        const request = indexedDB.open('OdeResultsDB', 2);
 
         request.onupgradeneeded = function(event) {
             const db = event.target.result;
