@@ -60,8 +60,8 @@ let _intake = (t) => {
 };
 
 // Example usage
-console.log(_intake(2));  // Should give the interpolated intake value at time 2 hours
-console.log(_intake(14)); // Should give the interpolated intake value at time 2 hours (14 % 12)
+
+console.log(_intake(47)); // Should give the interpolated intake value at time 2 hours (14 % 12)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -778,6 +778,7 @@ let QInsolFSG0 = 1.5197945035520457;
 
 export let odeSystem = (t, Q, Fr_data) => {
     
+
 MAcAcAb = 0.3748211934217298;
 MAcetateAcetateAb = 0.0924764022070675;
 MAcLaBa = 0.5962411513481308;
@@ -1145,6 +1146,7 @@ YBuSfPsBfBu = 0.0035094403972239;
 YBuSfnPsFnBu = 0.0039267784257723;
 YBuSpPsBaPo = 0.004415203762749;
 YPrSfPsBfAcPr = 5.869327452256714e-06;
+
 
     let [_intake_, QH2O,
           QPi, QAm,
