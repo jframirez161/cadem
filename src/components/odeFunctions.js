@@ -777,9 +777,8 @@ let QInsolFSG0 = 1.5197945035520457;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-export let odeSystem = (t, Q) => {
+export let odeSystem = (t, Q, Fr_data) => {
     
-
 MAcAcAb = 0.3748211934217298;
 MAcetateAcetateAb = 0.0924764022070675;
 MAcLaBa = 0.5962411513481308;
@@ -1185,8 +1184,31 @@ YPrSfPsBfAcPr = 5.869327452256714e-06;
 
 let intake = _intake(t);
 //let intake = processTime(t, feed_pulse_3NOP_7_29_24_0_002_48HR_RUN);
-
-        
+    
+FrFu = parseFloat(Fr_data['FrFu']);
+FrFd = parseFloat(Fr_data['FrFd']);
+FrSi = parseFloat(Fr_data['FrSi']);
+FrWs = parseFloat(Fr_data['FrWs']);
+FrLa = parseFloat(Fr_data['FrLa']);
+FrTg = parseFloat(Fr_data['FrTg']);
+FrAm = parseFloat(Fr_data['FrAm']);
+FrPs = parseFloat(Fr_data['FrPs']);
+FrPi = parseFloat(Fr_data['FrPi']);
+    
+FrFaU = parseFloat(Fr_data['FrFaU']);
+FrFaS = parseFloat(Fr_data['FrFaS']);
+    
+FrAc = parseFloat(Fr_data['FrAc']);
+FrBu = parseFloat(Fr_data['FrBu']);
+FrPr = parseFloat(Fr_data['FrPr']);
+FrBr = parseFloat(Fr_data['FrBr']);
+    
+FrNOP = parseFloat(Fr_data['FrNOP']);
+FrBicarb = parseFloat(Fr_data['FrBicarb']);
+FrP = parseFloat(Fr_data['FrP']); 
+    
+    
+    
 let dintakedt = intake;  
 let InFu = intake * FrFu/mrFu;
 let InFd = intake * FrFd/mrFd;
