@@ -94,8 +94,8 @@ const saveResultsToIndexedDB = (results) => {
                 const savedData = {
                     dietName: result.dietName,
                     lastIntake: lastSolution[0],
-                    lastCH4: lastSolution[stateVariableNames.indexOf('CH4')],
-                    lastCO2: lastSolution[stateVariableNames.indexOf('CO2')]
+                    lastCH4: lastSolution[1],
+                    lastCO2: lastSolution[2]
                 };
 
                 store.add({ id: `dietResult_${index}`, data: savedData });
