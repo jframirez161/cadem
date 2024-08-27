@@ -70,6 +70,14 @@ const RK4 = (t0, t1, initialConditions, odeSystem, dt, params) => {
 const saveResultsToIndexedDB = (results) => {
     const request = indexedDB.open('OdeResultsDB', 1);
 
+    request.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // Create the object store if it doesn't exist
+        if (!db.objectStoreNames.contains('results')) {
+            db.createObjectStore('results', { keyPath: 'id' });
+        }
+    };
+
     request.onerror = function(event) {
         console.error("IndexedDB error:", event.target.errorCode);
     };
@@ -82,18 +90,14 @@ const saveResultsToIndexedDB = (results) => {
         // Clear the store before saving new results
         store.clear().onsuccess = function() {
             results.forEach((result, index) => {
-                // Extract the last value of the specific columns you want to save
                 const lastSolution = result.result.solutions[result.result.solutions.length - 1];
-                
                 const savedData = {
                     dietName: result.dietName,
-                    lastIntake: lastSolution[0], // Assuming 'intake' is the first column
-                    lastCH4: lastSolution[1], // Assuming 'CH4' is a specific column
-                    lastCO2: lastSolution[2]  // Assuming 'CO2' is a specific column
+                    lastIntake: lastSolution[0],
+                    lastCH4: lastSolution[stateVariableNames.indexOf('CH4')],
+                    lastCO2: lastSolution[stateVariableNames.indexOf('CO2')]
                 };
 
-                console.log(savedData)
-                
                 store.add({ id: `dietResult_${index}`, data: savedData });
             });
         };
@@ -101,11 +105,6 @@ const saveResultsToIndexedDB = (results) => {
         transaction.oncomplete = function() {
             console.log("Results saved to IndexedDB");
         };
-    };
-
-    request.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        db.createObjectStore('results', { keyPath: 'id' });
     };
 };
 
