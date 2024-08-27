@@ -8,6 +8,14 @@ const getResultsFromIndexedDB = () => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('OdeResultsDB', 1);
 
+        request.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            // Check if the object store already exists, if not, create it
+            if (!db.objectStoreNames.contains('results')) {
+                db.createObjectStore('results', { keyPath: 'id' });
+            }
+        };
+
         request.onerror = function(event) {
             console.error("IndexedDB error:", event.target.errorCode);
             reject(event.target.errorCode);
@@ -34,6 +42,7 @@ const getResultsFromIndexedDB = () => {
         };
     });
 };
+
 
 const ScenarioRst = () => {
     const [results, setResults] = useState(null);
