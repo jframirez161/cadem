@@ -1,13 +1,12 @@
 //OdeSolver.js
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import Button from '@mui/material/Button'; 
 import { Box } from '@mui/material'; 
 import * as XLSX from 'xlsx';  
 import { odeSystem } from './odeFunctions'; 
 import { useDiets } from './DietContext'; 
-import { OdeContext } from './ODEContext';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -116,7 +115,6 @@ function OdeSolver() {
     const { diets } = useDiets(); 
     const [dietsList, setDietsList] = useState([]);
     const [results, setResults] = useState([]); 
-    const { results_2, setResults_2 } = useContext(OdeContext);
     
     useEffect(() => {
         setDietsList(diets);        
